@@ -11,35 +11,44 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.Clip;
 
 public class zombies {
-    Plantas p;
-    double x,y;
-    BufferedImage [] imagenes = new BufferedImage[31];
-    BufferedImage [] eat = new BufferedImage[31];
-    BackgroundSound sonidoeat;
+    Plantas p;//objeto principal para la referencia
+    double x,y; //posicion en x y y
+    BufferedImage [] imagenes = new BufferedImage[31]; //vector de imagenes sprites
+    BufferedImage [] eat = new BufferedImage[31];//vector de imagenes sprites comiendo
+    BackgroundSound sonidoeat; //sonido de comer
 
-    BufferedImage zoombie=null;
-    double velocidad;
-    int frame=0;
+    BufferedImage zoombie=null; //imagen que se va a mostrar dependiendo el sprite
+    double velocidad;//velocidad del zombie
+    int frame=0;//frame o imagen
+    
+    //zombie recibe plantas para la referencia y una posicion en y ya que en x
+    //siempre sera hasta el final
     zombies(Plantas p,int y){
-        this.p=p;
-        cargarImagenes();
-        this.x=p.screenX-200;
-        this.y=p.pixel*y+p.extraArriba;
-        velocidad=.5;
-        sonidoeat=new BackgroundSound("/Java/resources/zombie_eat.wav");
+        this.p=p;//igualamos la referencia
+        cargarImagenes(); //cargamos las imagenes
+        this.x=p.screenX-200; //x es el final - 200
+        this.y=p.pixel*y+p.extraArriba;//colocamos en y en base al pixel y el valor y 
+                                        //que es la fila
+
+        velocidad=.25; //velocidad de .25 ya que se actualiza 30 veces por segundo
+        //creamos el objeto de sonido pasandole la direccion
+        sonidoeat=new BackgroundSound("/Java/resources/zombie_eat.wav"); 
     }
 
+    //dibujamos al zombie en base a su frame y posicion
     public void draw(Graphics2D g2){
         g2.drawImage(zoombie,(int)x,(int)y,p.pixel,p.pixel,p);
     }
 
+    //fisica del movimiento y aqui hice tambien lo de seleccionar el frame
     public void fisica(){
-       
+        //siempre y cuando no colisione avanza si no avanza y se detiene el sonido de comer
         if(!colision()){
             x-=velocidad;
             sonidoeat.stop();
         }
-
+        //siempre y cuando no este colisionando osea no este comiendo escoje un frame
+        //del zombie moviendoze y lo pone en zombie que es el que se muestra
         if(!colision()){
         switch(frame){
             case 0: zoombie=imagenes[0]; break;
@@ -73,9 +82,10 @@ public class zombies {
             case 28: zoombie=imagenes[28]; break;
             case 29: zoombie=imagenes[29]; break;
             case 30: zoombie=imagenes[30]; break;
-            default: frame=0;
+            default: frame=0; //si el frame llega al final se reinicia para
+     //no salir del limite y no perder la referencia de las imagenes
         }
-    }else{
+    }else{ //en caso de colision esta comiendo y selecciona una de comiendo
         switch(frame){
             case 0: zoombie=eat[0]; break;
             case 1: zoombie=eat[1]; break;
@@ -101,31 +111,34 @@ public class zombies {
             default: frame=0;
         }
     }
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        //aunmentamos el frame para cambiar de imagen
         frame++;
+       
     }
 
+    //colision
     public boolean colision(){
+        //recirremos la matriz
         for (int i = 0; i < p.matriz.length; i++) {
             for (int j = 0; j < p.matriz[i].length; j++) {
+                //siempre y que en la matriz sea diferente de 0 o que hay una planta checamos
                 if (p.matriz[i][j] != 0) {
+                    //si al restar la velocidad osea la posicion que va tener el zombie al moverse
+                    // si es igual ala de una planta y menor osae que esta dentro como cuando 
+                    //seleccionamos algo en un menu > y < que el tamanio
                     if((x-velocidad>=p.extraxIzq+(j*p.pixel))&&(x-velocidad<=p.extraxIzq+(j*p.pixel)+p.pixel/2)){
-                        if((y>=p.extraArriba + (i * p.pixel))&&(y<=p.extraArriba + (i * p.pixel))){
-                            sonidoeat.clip.loop(Clip.LOOP_CONTINUOUSLY);
-                            return true;
+                        if(y==p.extraArriba + (i * p.pixel)){//esto es en y
+                            sonidoeat.clip.loop(Clip.LOOP_CONTINUOUSLY);//repoduce en loop
+                            return true; //devuelve verdadero para saber que colisiono
                         } 
                     }
+
                 }
             }
         }
         return false;
     }
-
+    //cargar las imagenes
     public void cargarImagenes(){
         try {
             imagenes[0]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/plain_zombie/frame_00.png"));

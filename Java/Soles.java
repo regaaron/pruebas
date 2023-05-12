@@ -15,6 +15,7 @@ public class Soles {
     BufferedImage img=null;
     Plantas p;
     int frame=0;
+    int counter;
     BackgroundSound sound= new BackgroundSound("/Java/resources/bien.wav");
     Soles(Plantas p){
         Random random = new Random();
@@ -58,7 +59,7 @@ public class Soles {
 
     }
 
-    public boolean mouseClicked(MouseEvent evento) throws Throwable {
+    public boolean mouseClicked(MouseEvent evento){
             if(evento.getX()>solx&&evento.getX()<solx+p.pixel
                 &&evento.getY()>soly&&evento.getY()<soly+p.pixel){
                     p.puntos+=25;   
@@ -78,7 +79,9 @@ public class Soles {
         }else{
             g2.drawImage(img, solx, soly, p.pixel,p.pixel,null);
         }
-        frame++;
+        
+            frame++;
+        
 
         
     }

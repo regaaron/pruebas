@@ -34,60 +34,54 @@ import javax.swing.JFrame;
  */
 public class Plantas extends JComponent implements Runnable {
 
-    final int col = 11;
-    final int row = 5;
-    final int pixel = 90;
-    final int extraxIzq = 240;
-    final int extraDer = 100;
-    final int extraArriba = 65;
-    final int screenX = col * pixel + extraDer + extraxIzq;
-    final int screenY = row * pixel + 100;
-    final int FPS = 40;
-    int puntos = 300;
-    int contadorsol = 0;
-    int movimiento = 0;
+    final int col = 11; //columnas
+    final int row = 5; 
+    final int pixel = 90; //tamanio de  pixel 
+    final int extraxIzq = 240; //espacio estra ala izq casa etc
+    final int extraDer = 100;   //extra derecha calle 
+    final int extraArriba = 65; //extra arriba contador de soles
+    final int screenX = col * pixel + extraDer + extraxIzq; //tamanio en x en vase a col y pixel + extras
+    final int screenY = row * pixel + 100; ////tamanio en y en base a ren pixeles y espacio extra
+    final int FPS = 30; //fotogramas por segundo actualiza la pantalla 30 veces cada segundo
+    int puntos = 300; //puntos iniciales
     Thread gameThread;
     BufferedImage back, score, gisante, girasol, nuez, gisante1,tagGirazol,
-     tagNuez, tagGisante, tagBomba, pala1, pala2,explosion;
-    int spriteCounter = 0;
-    Base base;
-    boolean tag1, tag2, tag3, tag4, tag5, tag6;
-    int spriteNum = 1;
-    int posx, posy;
-    BackgroundSound soundfondo;
-    GenSoles genSol;
-    boolean bpala = false;
-    CopyOnWriteArrayList<zombies> z= new CopyOnWriteArrayList<>();
-    CopyOnWriteArrayList<Soles> s= new CopyOnWriteArrayList<>();
-    Nivel1 lvl1;
+     tagNuez, tagGisante, tagBomba, pala1, pala2,explosion; //imagenes
+    Base base; //base de dibujo para no tener sobre saturado el paint
+    boolean tag1, tag2, tag3, tag4, tag5, tag6; //boleanos para los tags de las plantas o etiquetas
+    int posx, posy; //obtener la posicion en x y y del mouse
+    BackgroundSound soundfondo; //sonido de fondo
+    GenSoles genSol; //objeto que genera un sol cada 10s pero no mas de 10
+    boolean bpala = false; //boleano para saber si esta activa la pala
+    CopyOnWriteArrayList<zombies> z= new CopyOnWriteArrayList<>(); //vector de zombies
+    CopyOnWriteArrayList<Soles> s= new CopyOnWriteArrayList<>(); //vector de soles
+    Nivel1 lvl1; //objeto que es el nivel o que va ir creadno zombies en tiempo y cantidad especificados
     int matriz[][] = {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }; //matriz de las flores
 
     Plantas() {
-        System.out.println(screenX);
-        System.out.println(screenY);
-        setPreferredSize(new Dimension(screenX, screenY));
-        cargarImagenes();
-        /* 
-        z.add(new zombies(this, 3));
-        z.add(new zombies(this,4));
-        z.add(new zombies(this, 0));
-        z.add(new zombies(this, 1));
-        z.add(new zombies(this, 2));
-
-        */
-        lvl1=new Nivel1(this);
-        lvl1.start();
-        genSol= new GenSoles(this);
-        genSol.start();
-        base = new Base(this);
-        soundfondo = new BackgroundSound("/Java/resources/fondoz.wav");
+        setPreferredSize(new Dimension(screenX, screenY)); //crear pantalla con este tamanio
+        cargarImagenes(); //metodo que carga algunas imagenes base
+      
+        lvl1=new Nivel1(this); //inicializamos el objeto lvl1 y le pasamos este 
+                                //objeto para poder tener referencia a el
+        lvl1.start();   //corremos el hilo
+        genSol= new GenSoles(this); //creamos el objeto de gen de soles 
+        genSol.start(); //inicializamos el hilo de los soles
+        base = new Base(this); //se encargara de pintar la base el fondo los tags punntos etc
+                                //le pasamos el objeto para tener referencia como tam del pixel etc
+        soundfondo = new BackgroundSound("/Java/resources/fondoz.wav"); 
         soundfondo.clip.loop(Clip.LOOP_CONTINUOUSLY);
-        // logica de teclado
+        //creacion del objeto de sonido de fondo con la ruta y reproducimos en buqle
+
+        // logica de teclado 
+        //no se usa
+        //no se usa
+        //no se usa
         addKeyListener(new KeyAdapter() {
 
             // si se preciona una tecla envia verdadero y el codigo de la
@@ -102,25 +96,11 @@ public class Plantas extends JComponent implements Runnable {
 
             // en caso de que la tecla se este precionando pasa true y el codigo de teclado
             private void actualiza(int keyCode, boolean pressed) {
-
-                switch (keyCode) {
-                    case KeyEvent.VK_UP: // caso aariba
-
-                        break;
-                    case KeyEvent.VK_DOWN: // caso abajo
-
-                        break;
-                    case KeyEvent.VK_LEFT: // caso W
-                        movimiento += 4;
-                        break;
-                    case KeyEvent.VK_RIGHT: // caso S
-                        movimiento -= 4;
-                        break;
-                }
             }
 
         });
 
+        //eventos del mouse
         addMouseListener(new MouseAdapter() {
 
             @Override
@@ -133,32 +113,35 @@ public class Plantas extends JComponent implements Runnable {
 
             }
 
-            @Override
+            @Override//evento de click
             public void mouseClicked(MouseEvent evento) {
-                try {
+                
+                //recorremos el arreglo de soles
                     for(Soles sol:s){
-                        if(sol!=null){
+                        //checamos si se dio click en el sol de ser asi lo eliminamos del arreglo
                             if(sol.mouseClicked(evento)){
-                                s.remove(sol);
+                                s.remove(sol);//eliminar del arreglo
                             }
-                        }
                     }
-                } catch (Throwable e) {
-                    // TODO Auto-generated catch block
-                    System.out.println("Error click " + e.toString());
-                }
-
+              
+                    //logica del 1er tag posicion
                 if (evento.getX() > 59 && evento.getX() < 133 && evento.getY() > 25 && evento.getY() < 87) {
+                        //se checa que no este activado ya y que cuentes con los puntos
                     if (tag1 == false && puntos >= 50) {
+                        //checa qu ningun otro este activado
                         if (tags()) {
-                            tag1 = true;
+                            tag1 = true;//activamos
                         }
 
                     } else {
-                        tag1 = false;
+                        tag1 = false; //desactivamos
                     }
-                    bpala = false;
+                    bpala = false; //ponemos la pala en false siempre al escoger una etiqueta
+                    //ya que si no ala hora de colocarlo y si al mismo tiempo teniamos la pala lo agrega
+                    //pero a ala vez lo elimina
                 }
+
+                //lo mismo pero con tag2
                 if (evento.getX() > 59 && evento.getX() < 133 && evento.getY() > 116 && evento.getY() < 175) {
                     if (tag2 == false && puntos >= 60) {
                         if (tags()) {
@@ -169,6 +152,8 @@ public class Plantas extends JComponent implements Runnable {
                     }
                     bpala = false;
                 }
+
+                //lo mismo pero con tag3
                 if (evento.getX() > 59 && evento.getX() < 133 && evento.getY() > 203 && evento.getY() < 267) {
                     if (tag3 == false && puntos >= 70) {
                         if (tags()) {
@@ -179,6 +164,8 @@ public class Plantas extends JComponent implements Runnable {
                     }
                     bpala = false;
                 }
+
+                //lo mismo pero con tag3
                 if (evento.getX() > 59 && evento.getX() < 133 && evento.getY() > 295 && evento.getY() < 359) {
                     if (tag4 == false && puntos >= 80) {
                         if (tags()) {
@@ -189,6 +176,8 @@ public class Plantas extends JComponent implements Runnable {
                     }
                     bpala = false;
                 }
+
+                //lo mismo pero con tag4
                 if (evento.getX() > 59 && evento.getX() < 133 && evento.getY() > 387 && evento.getY() < 448) {
                     if (tag5 == false && puntos >= 90) {
                         if (tags()) {
@@ -199,6 +188,8 @@ public class Plantas extends JComponent implements Runnable {
                     }
                     bpala = false;
                 }
+
+                //lo mismo pero con tag5
                 if (evento.getX() > 59 && evento.getX() < 133 && evento.getY() > 472 && evento.getY() < 540) {
                     if (tag6 == false && puntos >= 100) {
                         if (tags()) {
@@ -210,20 +201,26 @@ public class Plantas extends JComponent implements Runnable {
                     bpala = false;
                 }
 
+                    //logica para plantar plantas
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 5; j++) {
+                        //logica de las cordenadas de la matriz en buqle
                         if (evento.getX() > 244 + (i * pixel) && evento.getX() < 325 + (i * pixel)
                                 && evento.getY() > 67 + (j * pixel) && evento.getY() < 150 + (j * pixel)) {
-
+                            //metodo para colocar en la matriz  dependiendo que etiqueta estaba activa
                             ColocarMAtriz(i, j);
+                            //si la pala esta activa coloca 0 en la posicion de donde se dio click
+                            //eliminando la planta
                             if (bpala) {
                                 matriz[j][i] = 0;
                             }
+
                         }
                     }
                 }
-
+                //logica para activar la pala posicion
                 if (evento.getX() > 392 && evento.getX() < 453 && evento.getY() > 19 && evento.getY() < 61) {
+                    //si esta activa desactivamos si no activamos y colocamos las equitenas el false
                     if (bpala) {
                         bpala = false;
                     } else {
@@ -235,65 +232,63 @@ public class Plantas extends JComponent implements Runnable {
 
         });
 
+        //otors eventos del mouse
         addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
+            @Override//arrastrar
             public void mouseDragged(MouseEvent e) {
 
             }
-
+            //movel el mouse
             public void mouseMoved(MouseEvent evento) {
-
-               // System.out.println("x: " + evento.getX());
-                //System.out.println("y: " + evento.getY());
+                //cada que se mueve actualizamos la refencia del mouse
                 posx=evento.getX();
                 posy=evento.getY();
-
-                if (!tags()) {
-                    posx = evento.getX();
-                    posy = evento.getY();
-                }
-
-                if (bpala) {
-                    posx = evento.getX();
-                    posy = evento.getY();
-                }
 
             }
         });
 
-        setFocusable(true);
+        setFocusable(true);//se mantiene enfocado a los eventos del mouse
 
     }
 
+    //este es el metodo que teniamos arriba de colocar en la matriz dependiendo del tag activado
     public void ColocarMAtriz(int i, int j) {
+        //antes de eco checamos que no este una planta ya en esa posicion
         if (matriz[j][i] == 0) {
-
+            //si es el tag 1 colocammos 1 colocamos el tag en falso para no poder plantar mas
+            //y reducimos el precio por la planta
             if (tag1) {
 
                 matriz[j][i] = 1;
                 tag1 = false;
                 puntos -= 50;
             }
+            //lo mismo pero con el tag2
             if (tag2) {
                 matriz[j][i] = 3;
                 tag2 = false;
-                puntos -= 100;
+                puntos -= 50;
             }
+            //lo mismo pero con el tag3
             if (tag3) {
                 matriz[j][i] = 2;
                 tag3 = false;
                 puntos -= 50;
             }
+            //lo mismo pero con el tag4
+
             if (tag4) {
                 matriz[j][i] = 4;
                 tag4 = false;
-                puntos -= 70;
+                puntos -= 50;
             }
+            //lo mismo pero con el tag5
             if (tag5) {
                 matriz[j][i] = 2;
                 tag5 = false;
-                puntos -= 40;
+                puntos -= 50;
             }
+            //lo mismo pero con el tag6
             if (tag6) {
                 matriz[j][i] = 4;
                 tag6 = false;
@@ -302,37 +297,18 @@ public class Plantas extends JComponent implements Runnable {
         }
     }
 
-    @Override
+    @Override//dibujar 
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        base.draw(g2);
-        spriteCounter++;
-        if (spriteCounter > 20) {
-            if (spriteNum == 1) {
-                spriteNum = 2;
-            } else if (spriteNum == 2) {
-                spriteNum = 3;
-            } else {
-                if (spriteNum == 3) {
-                    spriteNum = 1;
-                }
-            }
-            spriteCounter = 0;
-            movimiento++;
-        }
-
-        contadorsol++;
-        /* 
-        if (contadorsol > 200) {
-            s.add(new Soles(this));
-            contadorsol = 0;
-
-        }
-        */
+        base.draw(g2); //dibujamos toda la base el fondo tags puntos etc
+        //recorremos el vector de soles y dibujamos cada uno 
+        //conocido como for each
+        //conocido como for each
+        //conocido como for each
         for(Soles sol:s){
             sol.draw(g2);
         }
-
+        //lo mismo pero con los zombies
         for(zombies zz: z){
             zz.draw(g2);
         }
@@ -347,22 +323,17 @@ public class Plantas extends JComponent implements Runnable {
                 System.exit(0);
             }
         });
-        // jf.setLocationRelativeTo(null);
-        // jf.setResizable(false);
         Menu menu = new Menu(jf);
-        // Plantas demo1 = new Plantas();
         jf.getContentPane().add(menu);
-
-        // jf.getContentPane().add(demo1);
         jf.pack();
         jf.setVisible(true);
-        // demo1.cicloPrincipalJuego();
-
     }
 
+    //metodo que checa que todos los tags estan desactivados
     public boolean tags() {
         return (!tag1 && !tag2 && !tag3 && !tag4 && !tag5 && !tag6);
     }
+
 
     public void cicloPrincipalJuego() {
 
@@ -370,7 +341,8 @@ public class Plantas extends JComponent implements Runnable {
         gameThread.start();
 
     }
-
+    
+    //meotodo que carga todas las imagenes
     private void cargarImagenes() {
         try {
             back = ImageIO.read(getClass().getResourceAsStream("/Java/resources/background.png"));
@@ -392,6 +364,8 @@ public class Plantas extends JComponent implements Runnable {
         }
     }
 
+    //logica de los fps no se explicarlo muy bien pero revisalo ya que ahi actualizamos 
+    //un par de cosas
     @Override
     public void run() {
         double drawIterval = 1000000000 / FPS;
@@ -406,15 +380,17 @@ public class Plantas extends JComponent implements Runnable {
             timer += (currentTime - lastTime);
             lastTime = currentTime;
             if (delta >= 1) {
+                //recorremos el arreglo de zombies y le hablamos a su fisica para
+                //que se mueva cada actualizacion
                 for(zombies zz: z){
                     zz.fisica();
                 }
+                //repintamos
                 repaint();
                 delta--;
                 drawCount++;
             }
             if (timer >= 1000000000) {
-                // System.out.println("FPS: "+drawCount);
                 drawCount = 0;
                 timer = 0;
             }
