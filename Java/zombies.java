@@ -25,7 +25,7 @@ public class zombies {
         cargarImagenes();
         this.x=p.screenX-50;
         this.y=p.pixel*y+p.extraArriba;
-        velocidad=1;
+        velocidad=.5;
         sonidoeat=new BackgroundSound("/Java/resources/zombie_eat.wav");
     }
 
@@ -39,6 +39,7 @@ public class zombies {
             x-=velocidad;
             sonidoeat.stop();
         }
+
         if(!colision()){
         switch(frame){
             case 0: zoombie=imagenes[0]; break;
@@ -100,7 +101,12 @@ public class zombies {
             default: frame=0;
         }
     }
-
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         frame++;
     }
 

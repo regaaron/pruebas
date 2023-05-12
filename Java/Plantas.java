@@ -42,7 +42,7 @@ public class Plantas extends JComponent implements Runnable {
     final int extraArriba = 65;
     final int screenX = col * pixel + extraDer + extraxIzq;
     final int screenY = row * pixel + 100;
-    final int FPS = 20;
+    final int FPS = 40;
     int puntos = 300;
     int contadorsol = 0;
     int movimiento = 0;
@@ -50,7 +50,6 @@ public class Plantas extends JComponent implements Runnable {
     BufferedImage back, score, gisante, girasol, nuez, gisante1,tagGirazol,
      tagNuez, tagGisante, tagBomba, pala1, pala2,explosion;
     int spriteCounter = 0;
-    Soles[] Soless = new Soles[10];
     Base base;
     boolean tag1, tag2, tag3, tag4, tag5, tag6;
     int spriteNum = 1;
@@ -131,10 +130,10 @@ public class Plantas extends JComponent implements Runnable {
             @Override
             public void mouseClicked(MouseEvent evento) {
                 try {
-                    for (int i = 0; i < 10; i++) {
-                        if (Soless[i] != null) {
-                            if (Soless[i].mouseClicked(evento)) {
-                                Soless[i] = null;
+                    for(Soles sol:s){
+                        if(sol!=null){
+                            if(sol.mouseClicked(evento)){
+                                s.remove(sol);
                             }
                         }
                     }
@@ -318,22 +317,14 @@ public class Plantas extends JComponent implements Runnable {
 
         contadorsol++;
 
-        if (contadorsol > 300) {
-            for (int i = 0; i < 10; i++) {
-                if (Soless[i] == null) {
-                    Soless[i] = new Soles(this);
-                    break;
-                }
-            }
-
+        if (contadorsol > 200) {
+            s.add(new Soles(this));
             contadorsol = 0;
 
         }
-
-        for (int i = 0; i < 10; i++) {
-            if (Soless[i] != null) {
-                Soless[i].draw(g2);
-            }
+    
+        for(Soles sol:s){
+            sol.draw(g2);
         }
 
         for(zombies zz: z){
