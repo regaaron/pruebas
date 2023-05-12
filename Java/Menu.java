@@ -104,8 +104,8 @@ public class Menu extends JComponent {
         
         g.setColor(Color.black);
         g.fillRect(0, 0, x, y);
-        
         g.drawImage(img, 0, 0,x,y, this);
+        
     }
 
 }
