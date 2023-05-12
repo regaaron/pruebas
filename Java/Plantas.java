@@ -19,6 +19,7 @@ import java.awt.event.WindowEvent;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,14 +42,13 @@ public class Plantas extends JComponent implements Runnable {
     final int extraArriba = 65;
     final int screenX = col * pixel + extraDer + extraxIzq;
     final int screenY = row * pixel + 100;
-    final int FPS = 60;
+    final int FPS = 20;
     int puntos = 300;
     int contadorsol = 0;
     int movimiento = 0;
     Thread gameThread;
-    BufferedImage back, score, gisante, girasol, nuez, gisante1,
-            zoombie, tagGirazol, tagNuez, tagGisante, tagBomba,
-            zoombie1, zoombie2, zoombie3, pala1, pala2,explosion;
+    BufferedImage back, score, gisante, girasol, nuez, gisante1,tagGirazol,
+     tagNuez, tagGisante, tagBomba, pala1, pala2,explosion;
     int spriteCounter = 0;
     Soles[] Soless = new Soles[10];
     Base base;
@@ -57,7 +57,7 @@ public class Plantas extends JComponent implements Runnable {
     int posx, posy;
     BackgroundSound soundfondo;
     boolean bpala = false;
-
+    CopyOnWriteArrayList<zombies> z= new CopyOnWriteArrayList<>();
     int matriz[][] = {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -70,6 +70,14 @@ public class Plantas extends JComponent implements Runnable {
         System.out.println(screenY);
         setPreferredSize(new Dimension(screenX, screenY));
         cargarImagenes();
+        z.add(new zombies(this, 3));
+        z.add(new zombies(this,4));
+        z.add(new zombies(this, 0));
+        z.add(new zombies(this, 1));
+        z.add(new zombies(this, 2));
+
+
+
         base = new Base(this);
         soundfondo = new BackgroundSound("/Java/resources/fondoz.wav");
         soundfondo.clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -327,6 +335,10 @@ public class Plantas extends JComponent implements Runnable {
             }
         }
 
+        for(zombies zz: z){
+            zz.draw(g2);
+        }
+
     }
     
     public static void main(String[] args) {
@@ -373,9 +385,6 @@ public class Plantas extends JComponent implements Runnable {
             tagGisante = ImageIO.read(getClass().getResourceAsStream("/Java/resources/tagGisante.png"));
             tagNuez = ImageIO.read(getClass().getResourceAsStream("/Java/resources/tagNuez.png"));
             tagBomba = ImageIO.read(getClass().getResourceAsStream("/Java/resources/tagBomba.png"));
-            zoombie1 = ImageIO.read(getClass().getResourceAsStream("/Java/resources/zoombie1.png"));
-            zoombie2 = ImageIO.read(getClass().getResourceAsStream("/Java/resources/zoombie2.png"));
-            zoombie3 = ImageIO.read(getClass().getResourceAsStream("/Java/resources/zoombie3.png"));
             pala1 = ImageIO.read(getClass().getResourceAsStream("/Java/resources/pala.png"));
             pala2 = ImageIO.read(getClass().getResourceAsStream("/Java/resources/pala2.png"));
             explosion=ImageIO.read(getClass().getResourceAsStream("/Java/resources/explosion.png"));
@@ -399,7 +408,9 @@ public class Plantas extends JComponent implements Runnable {
             timer += (currentTime - lastTime);
             lastTime = currentTime;
             if (delta >= 1) {
-
+                for(zombies zz: z){
+                    zz.fisica();
+                }
                 repaint();
                 delta--;
                 drawCount++;

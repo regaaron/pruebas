@@ -20,18 +20,6 @@ public class Base {
         g.drawImage(p.score, p.extraxIzq + 10, 0, p.pixel - 10, p.pixel - 10, p);
         g.setColor(new Color(0xE8B059));
         BufferedImage image = null;
-        switch (p.spriteNum) {
-            case 1:
-                image = p.zoombie1;
-                break;
-            case 2:
-                image = p.zoombie2;
-                break;
-            case 3:
-                image = p.zoombie3;
-                break;
-
-        }
         g.drawImage(image, p.screenX - 150 - p.movimiento, p.extraArriba + (2 * p.pixel), p.pixel, p.pixel, p);
         g.drawImage(image, p.screenX - 150 - p.movimiento, p.extraArriba + (3 * p.pixel), p.pixel, p.pixel, p);
         g.drawImage(image, p.screenX - 150 - p.movimiento, p.extraArriba + (4 * p.pixel), p.pixel, p.pixel, p);
