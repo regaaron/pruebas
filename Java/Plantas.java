@@ -58,6 +58,7 @@ public class Plantas extends JComponent implements Runnable {
     BackgroundSound soundfondo;
     boolean bpala = false;
     CopyOnWriteArrayList<zombies> z= new CopyOnWriteArrayList<>();
+    CopyOnWriteArrayList<Soles> s= new CopyOnWriteArrayList<>();
     int matriz[][] = {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
