@@ -23,7 +23,7 @@ public class zombies {
     zombies(Plantas p,int y){
         this.p=p;
         cargarImagenes();
-        this.x=p.screenX-50;
+        this.x=p.screenX-200;
         this.y=p.pixel*y+p.extraArriba;
         velocidad=.5;
         sonidoeat=new BackgroundSound("/Java/resources/zombie_eat.wav");

@@ -55,9 +55,11 @@ public class Plantas extends JComponent implements Runnable {
     int spriteNum = 1;
     int posx, posy;
     BackgroundSound soundfondo;
+    GenSoles genSol;
     boolean bpala = false;
     CopyOnWriteArrayList<zombies> z= new CopyOnWriteArrayList<>();
     CopyOnWriteArrayList<Soles> s= new CopyOnWriteArrayList<>();
+    Nivel1 lvl1;
     int matriz[][] = {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -70,14 +72,18 @@ public class Plantas extends JComponent implements Runnable {
         System.out.println(screenY);
         setPreferredSize(new Dimension(screenX, screenY));
         cargarImagenes();
+        /* 
         z.add(new zombies(this, 3));
         z.add(new zombies(this,4));
         z.add(new zombies(this, 0));
         z.add(new zombies(this, 1));
         z.add(new zombies(this, 2));
 
-
-
+        */
+        lvl1=new Nivel1(this);
+        lvl1.start();
+        genSol= new GenSoles(this);
+        genSol.start();
         base = new Base(this);
         soundfondo = new BackgroundSound("/Java/resources/fondoz.wav");
         soundfondo.clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -237,8 +243,8 @@ public class Plantas extends JComponent implements Runnable {
 
             public void mouseMoved(MouseEvent evento) {
 
-                System.out.println("x: " + evento.getX());
-                System.out.println("y: " + evento.getY());
+               // System.out.println("x: " + evento.getX());
+                //System.out.println("y: " + evento.getY());
                 posx=evento.getX();
                 posy=evento.getY();
 
@@ -316,13 +322,13 @@ public class Plantas extends JComponent implements Runnable {
         }
 
         contadorsol++;
-
+        /* 
         if (contadorsol > 200) {
             s.add(new Soles(this));
             contadorsol = 0;
 
         }
-    
+        */
         for(Soles sol:s){
             sol.draw(g2);
         }
