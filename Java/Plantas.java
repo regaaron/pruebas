@@ -27,13 +27,14 @@ import javax.imageio.ImageIO;
 import javax.sound.sampled.Clip;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.xml.transform.Source;
 
 /**
  *
  * @author aaron
  */
 public class Plantas extends JComponent implements Runnable {
-
+    
     final int col = 11; //columnas
     final int row = 5; 
     final int pixel = 90; //tamanio de  pixel 
@@ -43,6 +44,7 @@ public class Plantas extends JComponent implements Runnable {
     final int screenX = col * pixel + extraDer + extraxIzq; //tamanio en x en vase a col y pixel + extras
     final int screenY = row * pixel + 100; ////tamanio en y en base a ren pixeles y espacio extra
     final int FPS = 30; //fotogramas por segundo actualiza la pantalla 30 veces cada segundo
+    int cargas=0;
     int puntos = 300; //puntos iniciales
     Thread gameThread;
     BufferedImage back, score, gisante, girasol, nuez, gisante1,tagGirazol,
@@ -55,6 +57,10 @@ public class Plantas extends JComponent implements Runnable {
     boolean bpala = false; //boleano para saber si esta activa la pala
     CopyOnWriteArrayList<zombies> z= new CopyOnWriteArrayList<>(); //vector de zombies
     CopyOnWriteArrayList<Soles> s= new CopyOnWriteArrayList<>(); //vector de soles
+    CopyOnWriteArrayList<Girazol> gi = new CopyOnWriteArrayList<>();//vector de girazoles
+    CopyOnWriteArrayList<Soles> soles2= new CopyOnWriteArrayList<>(); //vector de soles
+
+
     Nivel1 lvl1; //objeto que es el nivel o que va ir creadno zombies en tiempo y cantidad especificados
     int matriz[][] = {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -77,7 +83,7 @@ public class Plantas extends JComponent implements Runnable {
         soundfondo = new BackgroundSound("/Java/resources/fondoz.wav"); 
         soundfondo.clip.loop(Clip.LOOP_CONTINUOUSLY);
         //creacion del objeto de sonido de fondo con la ruta y reproducimos en buqle
-
+        
         // logica de teclado 
         //no se usa
         //no se usa
@@ -121,6 +127,13 @@ public class Plantas extends JComponent implements Runnable {
                         //checamos si se dio click en el sol de ser asi lo eliminamos del arreglo
                             if(sol.mouseClicked(evento)){
                                 s.remove(sol);//eliminar del arreglo
+                            }
+                    }
+
+                     for(Soles sol:soles2){
+                        //checamos si se dio click en el sol de ser asi lo eliminamos del arreglo
+                            if(sol.mouseClicked(evento)){
+                                soles2.remove(sol);//eliminar del arreglo
                             }
                     }
               
@@ -213,6 +226,11 @@ public class Plantas extends JComponent implements Runnable {
                             //eliminando la planta
                             if (bpala) {
                                 matriz[j][i] = 0;
+                                for(Girazol gir:gi){
+                                    if(gir.eliminar(evento)){
+                                        gi.remove(gir);
+                                    }
+                                }
                             }
 
                         }
@@ -260,6 +278,7 @@ public class Plantas extends JComponent implements Runnable {
             if (tag1) {
 
                 matriz[j][i] = 1;
+                gi.add(new Girazol(this, i,j));
                 tag1 = false;
                 puntos -= 50;
             }
@@ -305,14 +324,26 @@ public class Plantas extends JComponent implements Runnable {
         //conocido como for each
         //conocido como for each
         //conocido como for each
-        for(Soles sol:s){
-            sol.draw(g2);
-        }
+        
         //lo mismo pero con los zombies
         for(zombies zz: z){
             zz.draw(g2);
         }
+       // System.out.println(cargas++);
+        if(cargas%90==0){
+           // System.out.println("segundoosss 3");
+        }
+        for(Girazol gir:gi){
+            gir.draw(g2);
+        }
+        
+        for(Soles sol:s){
+            sol.draw(g2);
+        }
 
+        for(Soles sol:soles2){
+            sol.draw(g2);
+        }
     }
     
     public static void main(String[] args) {

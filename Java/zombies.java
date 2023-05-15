@@ -16,11 +16,11 @@ public class zombies {
     BufferedImage [] imagenes = new BufferedImage[31]; //vector de imagenes sprites
     BufferedImage [] eat = new BufferedImage[31];//vector de imagenes sprites comiendo
     BackgroundSound sonidoeat; //sonido de comer
-
+    BackgroundSound soundnew;
     BufferedImage zoombie=null; //imagen que se va a mostrar dependiendo el sprite
     double velocidad;//velocidad del zombie
     int frame=0;//frame o imagen
-    
+    int cambio=1;
     //zombie recibe plantas para la referencia y una posicion en y ya que en x
     //siempre sera hasta el final
     zombies(Plantas p,int y){
@@ -33,6 +33,8 @@ public class zombies {
         velocidad=.25; //velocidad de .25 ya que se actualiza 30 veces por segundo
         //creamos el objeto de sonido pasandole la direccion
         sonidoeat=new BackgroundSound("/Java/resources/zombie_eat.wav"); 
+        soundnew= new BackgroundSound("/Java/resources/plain_zombie.wav");
+        soundnew.clip.start();
     }
 
     //dibujamos al zombie en base a su frame y posicion
@@ -112,7 +114,12 @@ public class zombies {
         }
     }
         //aunmentamos el frame para cambiar de imagen
-        frame++;
+        cambio++;
+        if(cambio==3){
+            frame++;
+            cambio=1;
+        }
+        
        
     }
 

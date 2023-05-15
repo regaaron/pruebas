@@ -96,7 +96,7 @@ public class Base {
             for (int j = 0; j < p.matriz[i].length; j++) {
                 //1 girazoles
                 if (p.matriz[i][j] == 1) {
-                    g.drawImage(p.girasol, p.extraxIzq + (j * p.pixel), p.extraArriba + (i * p.pixel), p.pixel, p.pixel, p);
+                   // g.drawImage(p.girasol, p.extraxIzq + (j * p.pixel), p.extraArriba + (i * p.pixel), p.pixel, p.pixel, p);
                 }
                 //2 papas
                 if (p.matriz[i][j] == 2) {

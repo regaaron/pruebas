@@ -22,7 +22,7 @@ public class GenSoles extends Thread{
                 Thread.sleep(5000); // Espera 5 segundos
                 
                 //imprime cuantos soles se han creado
-                System.out.println("soles:" +s.size()); 
+               
                 //genera un sol despues de los 5 segundo solo si hay menos de 10 creados
                 if(s.size()<10){
                     s.add(new Soles(p)); //crea el sol y colo soles nesesita referencia

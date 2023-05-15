@@ -15,17 +15,25 @@ public class Soles {
     BufferedImage img=null;
     Plantas p;
     int frame=0;
-    int counter;
+    int cambio=1;
     BackgroundSound sound= new BackgroundSound("/Java/resources/bien.wav");
     Soles(Plantas p){
         Random random = new Random();
       
-        solx = random.nextInt(p.screenX-150) + 150;
-        solyfinal = random.nextInt(p.screenY-100) + 40;
+        solx = random.nextInt((p.screenX-p.extraDer-p.pixel*2)-p.extraxIzq) + p.extraxIzq;
+        solyfinal = random.nextInt((p.screenY-200)-40) + 40;
         soly=10;
         this.p=p;
         cargarImagen();
        
+    }
+
+    Soles(Plantas p,int x,int y){
+        this.p=p;
+        cargarImagen();
+        solx=x;
+        soly=y;
+        solyfinal=y;
     }
 
     public void cargarImagen(){
@@ -52,7 +60,7 @@ public class Soles {
             soles[19] = ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/sunlight/frame_19.png"));
             soles[20] = ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/sunlight/frame_20.png"));
             soles[21] = ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/sunlight/frame_21.png"));
-
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,6 +88,12 @@ public class Soles {
             g2.drawImage(img, solx, soly, p.pixel,p.pixel,null);
         }
         
+        cambio++;
+        if(cambio==3){
+            frame++;
+            cambio=1;
+        }
+
             frame++;
         
 

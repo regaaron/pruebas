@@ -13,6 +13,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.Clip;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -23,11 +24,14 @@ public class Menu extends JComponent {
     int y=750;
     BufferedImage fondo,play,moregames;
     BufferedImage img=null;
+    BackgroundSound menusound;
     Menu(JFrame jf) {
         this.setVisible(true);
         this.setPreferredSize(new Dimension(x, y));
         this.jf=jf;
         cagarImagenes();
+        menusound=new BackgroundSound("/Java/resources/start_menu.wav");
+        menusound.clip.loop(Clip.LOOP_CONTINUOUSLY);
         img=fondo;
         addMouseListener(new MouseAdapter() {
             @Override
@@ -88,7 +92,7 @@ public class Menu extends JComponent {
                 });
                 // jf.setLocationRelativeTo(null);
                 // jf.setResizable(false);
-               
+               menusound.clip.stop();
                 Plantas demo1 = new Plantas();
                 jf2.getContentPane().add(demo1);
 

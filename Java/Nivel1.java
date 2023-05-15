@@ -26,6 +26,31 @@ public class Nivel1 extends Thread{
                 z.add(new zombies(p,4));
                 z.add(new zombies(p,2));
                 z.add(new zombies(p,1));
+                Thread.sleep(10000);//espera 10 mas depues del anterior y coloca 3 mas
+                z.add(new zombies(p,4));
+                z.add(new zombies(p,2));
+                z.add(new zombies(p,1));
+                Thread.sleep(10000);//espera 10 mas depues del anterior y coloca 3 mas
+                z.add(new zombies(p,4));
+                z.add(new zombies(p,2));
+                z.add(new zombies(p,1));
+                Thread.sleep(10000);//espera 10 mas depues del anterior y coloca 3 mas
+                z.add(new zombies(p,4));
+                z.add(new zombies(p,2));
+                z.add(new zombies(p,1));
+                Thread.sleep(10000);//espera 10 mas depues del anterior y coloca 3 mas
+                z.add(new zombies(p,4));
+                z.add(new zombies(p,2));
+                z.add(new zombies(p,1));
+                Thread.sleep(10000);//espera 10 mas depues del anterior y coloca 3 mas
+                z.add(new zombies(p,4));
+                z.add(new zombies(p,2));
+                z.add(new zombies(p,1));
+                Thread.sleep(10000);//espera 10 mas depues del anterior y coloca 3 mas
+                z.add(new zombies(p,4));
+                z.add(new zombies(p,2));
+                z.add(new zombies(p,1));
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
