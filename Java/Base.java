@@ -100,16 +100,16 @@ public class Base {
                 }
                 //2 papas
                 if (p.matriz[i][j] == 2) {
-                    g.drawImage(p.gisante1, p.extraxIzq + (j * p.pixel), p.extraArriba + (i * p.pixel), p.pixel, p.pixel, p);
+                 //   g.drawImage(p.gisante1, p.extraxIzq + (j * p.pixel), p.extraArriba + (i * p.pixel), p.pixel, p.pixel, p);
                 }
                 //3 lanzagisantes
                 if (p.matriz[i][j] == 3) {
-                    g.drawImage(p.nuez, p.extraxIzq + (j * p.pixel), p.extraArriba + (i * p.pixel), p.pixel, p.pixel,p);
+                  //  g.drawImage(p.nuez, p.extraxIzq + (j * p.pixel), p.extraArriba + (i * p.pixel), p.pixel, p.pixel,p);
                 }
 
                 //4 topo
                 if(p.matriz[i][j]==4){
-                    g.drawImage(p.explosion, p.extraxIzq + (j * p.pixel), p.extraArriba + (i * p.pixel), p.pixel, p.pixel,p);
+                   // g.drawImage(p.explosion, p.extraxIzq + (j * p.pixel), p.extraArriba + (i * p.pixel), p.pixel, p.pixel,p);
 
                 }
             }

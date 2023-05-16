@@ -21,6 +21,7 @@ public class zombies {
     double velocidad;//velocidad del zombie
     int frame=0;//frame o imagen
     int cambio=1;
+    int vida=100;
     //zombie recibe plantas para la referencia y una posicion en y ya que en x
     //siempre sera hasta el final
     zombies(Plantas p,int y){
@@ -30,7 +31,7 @@ public class zombies {
         this.y=p.pixel*y+p.extraArriba;//colocamos en y en base al pixel y el valor y 
                                         //que es la fila
 
-        velocidad=2; //velocidad de .25 ya que se actualiza 30 veces por segundo
+        velocidad=.5; //velocidad de .25 ya que se actualiza 30 veces por segundo
         //creamos el objeto de sonido pasandole la direccion
         sonidoeat=new BackgroundSound("/Java/resources/zombie_eat.wav"); 
         soundnew= new BackgroundSound("/Java/resources/plain_zombie.wav");
@@ -40,6 +41,7 @@ public class zombies {
     //dibujamos al zombie en base a su frame y posicion
     public void draw(Graphics2D g2){
         g2.drawImage(zoombie,(int)x,(int)y,p.pixel,p.pixel,p);
+        g2.drawString(vida+"", (int) x-20, (int) y-20);
     }
 
     //fisica del movimiento y aqui hice tambien lo de seleccionar el frame
@@ -140,7 +142,7 @@ public class zombies {
                     //seleccionamos algo en un menu > y < que el tamanio
                     if((x-velocidad>=p.extraxIzq+(j*p.pixel))&&(x-velocidad<=p.extraxIzq+(j*p.pixel)+p.pixel/2)){
                         if(y==p.extraArriba + (i * p.pixel)){//esto es en y
-                            sonidoeat.clip.loop(Clip.LOOP_CONTINUOUSLY);//repoduce en loop
+                            sonidoeat.clip.start();//repoduce en loop
                             return true; //devuelve verdadero para saber que colisiono
                         } 
                     }

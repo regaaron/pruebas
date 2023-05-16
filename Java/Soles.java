@@ -82,21 +82,19 @@ public class Soles {
     public void draw(Graphics2D g2){
         selecFrame();
         if(soly<solyfinal){
-            g2.drawImage(img, solx,soly,p.pixel,p.pixel,null);
+            g2.drawImage(img, solx,soly,p.pixel/2,p.pixel/2,null);
             soly+=1.5;
         }else{
-            g2.drawImage(img, solx, soly, p.pixel,p.pixel,null);
+            g2.drawImage(img, solx, soly, p.pixel/2,p.pixel/2,null);
         }
         
         cambio++;
         if(cambio==3){
             frame++;
-            cambio=1;
+            cambio=0;
         }
 
             frame++;
-        
-
         
     }
 

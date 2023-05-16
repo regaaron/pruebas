@@ -48,8 +48,8 @@ public class Menu extends JComponent {
         addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                System.out.println("x: " +e.getX());
-                System.out.println("y: " +e.getY());
+              //  System.out.println("x: " +e.getX());
+               // System.out.println("y: " +e.getY());
 
                 
                 img=fondo;

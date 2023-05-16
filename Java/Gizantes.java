@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 public class Gizantes {
     int x,y;
@@ -16,13 +17,31 @@ public class Gizantes {
     int frame;
     int contador=0;
     int contador2=0;
-    
+    int vida=100;
+    int contador3=0;
+    CopyOnWriteArrayList<Balas> balas=new CopyOnWriteArrayList<>();
     Gizantes(Plantas p,int x,int y){
         this.p=p;
         this.x=p.extraxIzq+(x*p.pixel);
         this.y=p.extraArriba+(y*p.pixel);
-
+        this.balas=p.balas;
         cargarImagenes();
+    }
+
+    public void generarBala(){
+        for(zombies zz:p.z){
+            if(zz.y>=this.y&&zz.y<=this.y+p.pixel&&zz.x<p.extraxIzq+(p.pixel*8)){
+                contador2++;
+            if(contador2==30*5){//30 frames y 10 son los segundos 
+                balas.add(new Balas(p, this.x, this.y));
+                System.out.println("bala");
+                System.out.println(balas.size());
+                contador2=0;
+            }
+            }
+            
+        }
+        
     }
 
     public void cargarImagenes(){
@@ -50,8 +69,28 @@ public class Gizantes {
 
     public void draw(Graphics2D g2){
         cambiarFrame();
+        generarBala();
+        colision();
         g2.drawImage(gisantes, x,y,p.pixel,p.pixel,p);
+        g2.drawString(vida+"", x-20, y-20);
     }
+
+    public void colision(){
+
+        for(zombies zz:p.z){
+            if((this.x)+p.pixel>=zz.x&&(this.x)+p.pixel<=zz.x+p.pixel&&this.y>=zz.y&&this.y<=zz.y+p.pixel){
+                contador3++;
+                if(contador3==30*2.5){//30 frames y 10 son los segundos 
+                    vida-=50;
+                    contador3=0;
+                }
+                
+            }
+            
+        }
+    }
+
+    
 
     public void cambiarFrame(){
         switch(frame){

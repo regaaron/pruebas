@@ -60,6 +60,8 @@ public class Plantas extends JComponent implements Runnable {
     CopyOnWriteArrayList<Girazol> gi = new CopyOnWriteArrayList<>();//vector de girazoles
     CopyOnWriteArrayList<Soles> soles2= new CopyOnWriteArrayList<>(); //vector de soles
     CopyOnWriteArrayList<Gizantes> gisantes=new CopyOnWriteArrayList<>();
+    CopyOnWriteArrayList<Nuez> nuz=new CopyOnWriteArrayList<>();
+    CopyOnWriteArrayList<Balas> balas= new CopyOnWriteArrayList<>();
     int tiempo=0;
     boolean over=false;
     Nivel1 lvl1; //objeto que es el nivel o que va ir creadno zombies en tiempo y cantidad especificados
@@ -237,6 +239,11 @@ public class Plantas extends JComponent implements Runnable {
                                         gisantes.remove(gis);
                                     }
                                 }
+                                for(Nuez n:nuz){
+                                    if(n.eliminar(evento)){
+                                        nuz.remove(n);
+                                    }
+                                }
                             }
 
                         }
@@ -291,6 +298,8 @@ public class Plantas extends JComponent implements Runnable {
             //lo mismo pero con el tag2
             if (tag2) {
                 matriz[j][i] = 3;
+                nuz.add(new Nuez(this, i,j));
+
                 tag2 = false;
                 puntos -= 50;
             }
@@ -333,9 +342,7 @@ public class Plantas extends JComponent implements Runnable {
         //conocido como for each
         
         //lo mismo pero con los zombies
-        for(zombies zz: z){
-            zz.draw(g2);
-        }
+        
        // System.out.println(cargas++);
         if(cargas%90==0){
            // System.out.println("segundoosss 3");
@@ -345,6 +352,19 @@ public class Plantas extends JComponent implements Runnable {
         }
         for(Gizantes gir:gisantes){
             gir.draw(g2);
+            if(gir.vida<=0){
+                gisantes.remove(gir);
+                System.out.println("--------------");
+                System.out.println((gir.x-extraDer)/pixel);
+                System.out.println((gir.y-extraArriba)/pixel);
+                matriz[(gir.y-extraArriba)/pixel][(gir.x-extraDer)/pixel-1]=0;
+            }
+
+        }
+
+
+        for(Nuez n:nuz){
+            n.draw(g2);
         }
         
         for(Soles sol:s){
@@ -354,9 +374,18 @@ public class Plantas extends JComponent implements Runnable {
         for(Soles sol:soles2){
             sol.draw(g2);
         }
+
+        for(Balas b:balas){
+            b.draw(g2);
+        }
+
         if(over){
             g2.drawImage(gameover,((screenX/2)-(pixel)-tiempo),(screenY/2)-tiempo,pixel+(tiempo*2),pixel+(2*tiempo),null);
         }
+        for(zombies zz: z){
+            zz.draw(g2);
+        }
+    
     }
     
     public static void main(String[] args) {
@@ -429,7 +458,20 @@ public class Plantas extends JComponent implements Runnable {
                 //que se mueva cada actualizacion
                 for(zombies zz: z){
                     zz.fisica();
+                    if(zz.vida<=0){
+                        z.remove(zz);
+                    }
                 }
+
+                for(Balas b:balas){
+                    if(b.x>=b.xfinal||b.colision()){
+                        balas.remove(b);
+                    }
+                    
+                }
+
+                
+
                 //repintamos
                 repaint();
                 delta--;
