@@ -105,7 +105,7 @@ public class Girazol {
         contador++;
         if(contador==3){
             frame++;
-            contador=1;
+            contador=0;
         }
     }
 }

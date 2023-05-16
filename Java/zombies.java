@@ -30,7 +30,7 @@ public class zombies {
         this.y=p.pixel*y+p.extraArriba;//colocamos en y en base al pixel y el valor y 
                                         //que es la fila
 
-        velocidad=.25; //velocidad de .25 ya que se actualiza 30 veces por segundo
+        velocidad=2; //velocidad de .25 ya que se actualiza 30 veces por segundo
         //creamos el objeto de sonido pasandole la direccion
         sonidoeat=new BackgroundSound("/Java/resources/zombie_eat.wav"); 
         soundnew= new BackgroundSound("/Java/resources/plain_zombie.wav");
@@ -48,6 +48,11 @@ public class zombies {
         if(!colision()){
             x-=velocidad;
             sonidoeat.stop();
+            if(x<p.extraxIzq){
+                p.over=true;
+                if(p.tiempo<240)
+                     p.tiempo++;
+            }
         }
         //siempre y cuando no este colisionando osea no este comiendo escoje un frame
         //del zombie moviendoze y lo pone en zombie que es el que se muestra

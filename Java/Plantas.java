@@ -48,7 +48,7 @@ public class Plantas extends JComponent implements Runnable {
     int puntos = 300; //puntos iniciales
     Thread gameThread;
     BufferedImage back, score, gisante, girasol, nuez, gisante1,tagGirazol,
-     tagNuez, tagGisante, tagBomba, pala1, pala2,explosion; //imagenes
+     tagNuez, tagGisante, tagBomba, pala1, pala2,explosion,gameover; //imagenes
     Base base; //base de dibujo para no tener sobre saturado el paint
     boolean tag1, tag2, tag3, tag4, tag5, tag6; //boleanos para los tags de las plantas o etiquetas
     int posx, posy; //obtener la posicion en x y y del mouse
@@ -59,8 +59,9 @@ public class Plantas extends JComponent implements Runnable {
     CopyOnWriteArrayList<Soles> s= new CopyOnWriteArrayList<>(); //vector de soles
     CopyOnWriteArrayList<Girazol> gi = new CopyOnWriteArrayList<>();//vector de girazoles
     CopyOnWriteArrayList<Soles> soles2= new CopyOnWriteArrayList<>(); //vector de soles
-
-
+    CopyOnWriteArrayList<Gizantes> gisantes=new CopyOnWriteArrayList<>();
+    int tiempo=0;
+    boolean over=false;
     Nivel1 lvl1; //objeto que es el nivel o que va ir creadno zombies en tiempo y cantidad especificados
     int matriz[][] = {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -231,6 +232,11 @@ public class Plantas extends JComponent implements Runnable {
                                         gi.remove(gir);
                                     }
                                 }
+                                for(Gizantes gis:gisantes){
+                                    if(gis.eliminar(evento)){
+                                        gisantes.remove(gis);
+                                    }
+                                }
                             }
 
                         }
@@ -291,6 +297,7 @@ public class Plantas extends JComponent implements Runnable {
             //lo mismo pero con el tag3
             if (tag3) {
                 matriz[j][i] = 2;
+                gisantes.add(new Gizantes(this, i,j));
                 tag3 = false;
                 puntos -= 50;
             }
@@ -336,6 +343,9 @@ public class Plantas extends JComponent implements Runnable {
         for(Girazol gir:gi){
             gir.draw(g2);
         }
+        for(Gizantes gir:gisantes){
+            gir.draw(g2);
+        }
         
         for(Soles sol:s){
             sol.draw(g2);
@@ -343,6 +353,9 @@ public class Plantas extends JComponent implements Runnable {
 
         for(Soles sol:soles2){
             sol.draw(g2);
+        }
+        if(over){
+            g2.drawImage(gameover,((screenX/2)-(pixel)-tiempo),(screenY/2)-tiempo,pixel+(tiempo*2),pixel+(2*tiempo),null);
         }
     }
     
@@ -389,6 +402,7 @@ public class Plantas extends JComponent implements Runnable {
             pala1 = ImageIO.read(getClass().getResourceAsStream("/Java/resources/pala.png"));
             pala2 = ImageIO.read(getClass().getResourceAsStream("/Java/resources/pala2.png"));
             explosion=ImageIO.read(getClass().getResourceAsStream("/Java/resources/explosion.png"));
+            gameover=ImageIO.read(getClass().getResourceAsStream("/Java/resources/gameover.png"));
         } catch (IOException ex) {
             Logger.getLogger(Plantas.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getLocalizedMessage());
