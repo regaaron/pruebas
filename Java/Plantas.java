@@ -368,6 +368,11 @@ public class Plantas extends JComponent implements Runnable {
 
         for(Nuez n:nuz){
             n.draw(g2);
+            if(n.vida<=0){
+                nuz.remove(n);
+                matriz[(n.y-extraArriba)/pixel][(n.x-extraDer)/pixel-1]=0;
+
+            }
         }
         
         for(Soles sol:s){

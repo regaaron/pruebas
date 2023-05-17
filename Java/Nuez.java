@@ -11,11 +11,14 @@ import javax.imageio.ImageIO;
 public class Nuez {
     int x,y;
     BufferedImage [] imagenes= new BufferedImage[16];
+    BufferedImage [] imagenes2= new BufferedImage[15];
     BufferedImage nuez=null;
     Plantas p;
     int frame;
     int contador=0;
     int contador2=0;
+    int contador3=0;
+    int vida=200;
 
     Nuez(Plantas p,int x,int y){
         this.p=p;
@@ -42,6 +45,23 @@ public class Nuez {
             imagenes[13]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut/frame_13.png"));
             imagenes[14]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut/frame_14.png"));
             imagenes[15]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut/frame_15.png"));
+       
+            imagenes2[0]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_00.png"));
+            imagenes2[1]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_01.png"));
+            imagenes2[2]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_02.png"));
+            imagenes2[3]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_03.png"));
+            imagenes2[4]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_04.png"));
+            imagenes2[5]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_05.png"));
+            imagenes2[6]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_06.png"));
+            imagenes2[7]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_07.png"));
+            imagenes2[8]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_08.png"));
+            imagenes2[9]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_09.png"));
+            imagenes2[10]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_10.png"));
+            imagenes2[11]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_11.png"));
+            imagenes2[12]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_12.png"));
+            imagenes2[13]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_13.png"));
+            imagenes2[14]=ImageIO.read(getClass().getResourceAsStream("/Java/imagenes/wallnut2/frame_14.png"));
+        
         }catch(IOException e){
             System.out.println("Error al cargar imagenes de nuez/n"+e.getMessage());
         }
@@ -49,10 +69,52 @@ public class Nuez {
 
     public void draw(Graphics2D g2){
         cambiarFrame();
+        colision();
         g2.drawImage(nuez,x,y,p.pixel,p.pixel,p);
+        g2.drawString(vida+"", x-20, y-20);
+
+    }
+
+    public void colision(){
+
+        for(zombies zz:p.z){
+            if((this.x)+p.pixel>=zz.x&&(this.x)+p.pixel<=zz.x+p.pixel&&this.y>=zz.y&&this.y<=zz.y+p.pixel){
+                contador3++;
+                if(contador3==30*2.5){//30 frames y 10 son los segundos 
+                    vida-=25;
+                    contador3=0;
+                }
+                
+            }
+            
+        }
     }
 
     public void cambiarFrame(){
+        if(vida<100){
+            switch(frame){
+                case 0: nuez=imagenes2[0]; break;
+                case 1: nuez=imagenes2[1]; break;
+                case 2: nuez=imagenes2[2]; break;
+                case 3: nuez=imagenes2[3]; break;
+                case 4: nuez=imagenes2[4]; break;
+                case 5: nuez=imagenes2[5]; break;
+                case 6: nuez=imagenes2[6]; break;
+                case 7: nuez=imagenes2[7]; break;
+                case 8: nuez=imagenes2[8]; break;
+                case 9: nuez=imagenes2[9]; break;
+                case 10: nuez=imagenes2[10]; break;
+                case 11: nuez=imagenes2[11]; break;
+                case 12: nuez=imagenes2[12]; break;
+                case 13: nuez=imagenes2[13]; break;
+                case 14: nuez=imagenes2[14]; break;
+             
+                
+                default: frame=0;
+            }
+        }else{
+
+        
         switch(frame){
             case 0: nuez=imagenes[0]; break;
             case 1: nuez=imagenes[1]; break;
@@ -73,6 +135,7 @@ public class Nuez {
             
             default: frame=0;
         }
+    }
 
         contador++;
         if(contador==3){
