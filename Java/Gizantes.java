@@ -30,7 +30,7 @@ public class Gizantes {
 
     public void generarBala(){
         for(zombies zz:p.z){
-            if(zz.y>=this.y&&zz.y<=this.y+p.pixel&&zz.x<p.extraxIzq+(p.pixel*8)){
+            if(zz.y>=this.y&&zz.y<=this.y+p.pixel/2&&zz.x<p.extraxIzq+(p.pixel*8)){
                 contador2++;
             if(contador2==30*5){//30 frames y 10 son los segundos 
                 balas.add(new Balas(p, this.x, this.y));
@@ -81,7 +81,7 @@ public class Gizantes {
             if((this.x)+p.pixel>=zz.x&&(this.x)+p.pixel<=zz.x+p.pixel&&this.y>=zz.y&&this.y<=zz.y+p.pixel){
                 contador3++;
                 if(contador3==30*2.5){//30 frames y 10 son los segundos 
-                    vida-=50;
+                    vida-=25;
                     contador3=0;
                 }
                 

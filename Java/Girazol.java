@@ -16,6 +16,8 @@ public class Girazol {
     int frame=0;
     int contador=0;
     int contador2=0;
+    int contador3=0;
+    int vida=100;
     CopyOnWriteArrayList <Soles> soles;
 
     Girazol(Plantas p,int x,int y){
@@ -27,6 +29,20 @@ public class Girazol {
         cargarImagenes();
     }
     
+    public void colision(){
+
+        for(zombies zz:p.z){
+            if((this.x)+p.pixel>=zz.x&&(this.x)+p.pixel<=zz.x+p.pixel&&this.y>=zz.y&&this.y<=zz.y+p.pixel){
+                contador3++;
+                if(contador3==30*2.5){//30 frames y 10 son los segundos 
+                    vida-=25;
+                    contador3=0;
+                }
+                
+            }
+            
+        }
+    }
 
     public boolean eliminar(MouseEvent e){
         
@@ -67,7 +83,10 @@ public class Girazol {
     public void draw(Graphics2D g2){
         cambiarFrame();
         generarSol();
+        colision();
         g2.drawImage(girazol,x, y,p.pixel,p.pixel,p);
+        g2.drawString(vida+"", x-20, y-20);
+
     }
 
     public void generarSol(){

@@ -349,14 +349,17 @@ public class Plantas extends JComponent implements Runnable {
         }
         for(Girazol gir:gi){
             gir.draw(g2);
+            if(gir.vida<=0){
+                gi.remove(gir);
+                matriz[(gir.y-extraArriba)/pixel][(gir.x-extraDer)/pixel-1]=0;
+
+            }
         }
         for(Gizantes gir:gisantes){
             gir.draw(g2);
             if(gir.vida<=0){
                 gisantes.remove(gir);
-                System.out.println("--------------");
-                System.out.println((gir.x-extraDer)/pixel);
-                System.out.println((gir.y-extraArriba)/pixel);
+               
                 matriz[(gir.y-extraArriba)/pixel][(gir.x-extraDer)/pixel-1]=0;
             }
 
@@ -459,9 +462,14 @@ public class Plantas extends JComponent implements Runnable {
                 for(zombies zz: z){
                     zz.fisica();
                     if(zz.vida<=0){
+                        
+                         zz.sonidoeat.clip.stop();
                         z.remove(zz);
                     }
                 }
+                
+
+
 
                 for(Balas b:balas){
                     if(b.x>=b.xfinal||b.colision()){

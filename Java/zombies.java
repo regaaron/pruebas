@@ -142,7 +142,7 @@ public class zombies {
                     //seleccionamos algo en un menu > y < que el tamanio
                     if((x-velocidad>=p.extraxIzq+(j*p.pixel))&&(x-velocidad<=p.extraxIzq+(j*p.pixel)+p.pixel/2)){
                         if(y==p.extraArriba + (i * p.pixel)){//esto es en y
-                            sonidoeat.clip.start();//repoduce en loop
+                            sonidoeat.clip.loop(Clip.LOOP_CONTINUOUSLY);//repoduce en loop
                             return true; //devuelve verdadero para saber que colisiono
                         } 
                     }
