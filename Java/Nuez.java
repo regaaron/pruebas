@@ -78,7 +78,7 @@ public class Nuez {
     public void colision(){
 
         for(zombies zz:p.z){
-            if((this.x)+p.pixel>=zz.x&&(this.x)+p.pixel<=zz.x+p.pixel&&this.y>=zz.y&&this.y<=zz.y+p.pixel){
+            if((this.x)+p.pixel>=zz.x&&(this.x)+p.pixel<=zz.x+p.pixel&&this.y>=zz.y&&this.y<=zz.y+p.pixel/2){
                 contador3++;
                 if(contador3==30*2.5){//30 frames y 10 son los segundos 
                     vida-=25;
@@ -91,7 +91,7 @@ public class Nuez {
     }
 
     public void cambiarFrame(){
-        if(vida<100){
+        if(vida<=100){
             switch(frame){
                 case 0: nuez=imagenes2[0]; break;
                 case 1: nuez=imagenes2[1]; break;
