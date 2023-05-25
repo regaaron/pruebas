@@ -5,4 +5,7 @@
 	"python.analysis.extraPaths": [
 		"./Python"
 	],
+	"files.associations": {
+		"ejemplo4": "c"
+	},
 }

@@ -19,23 +19,23 @@ public class Gizantes {
     int contador2=0;
     int vida=100;
     int contador3=0;
-    CopyOnWriteArrayList<Balas> balas=new CopyOnWriteArrayList<>();
+    CopyOnWriteArrayList<Balas> vectorBalas=new CopyOnWriteArrayList<>();
     Gizantes(Plantas p,int x,int y){
         this.p=p;
         this.x=p.extraxIzq+(x*p.pixel);
         this.y=p.extraArriba+(y*p.pixel);
-        this.balas=p.balas;
+        this.vectorBalas=p.vectorBalas;
         cargarImagenes();
     }
 
     public void generarBala(){
-        for(zombies zz:p.z){
-            if(zz.y>=this.y&&zz.y<=this.y+p.pixel/2&&zz.x<p.extraxIzq+(p.pixel*8)){
-                contador2++;
-            if(contador2==30*5){//30 frames y 10 son los segundos 
-                balas.add(new Balas(p, this.x, this.y));
+        for(zombies zombie:p.vectorZombies){
+            if(zombie.y>=this.y&&zombie.y<=this.y+p.pixel/2&&zombie.x<p.extraxIzq+(p.pixel*8)&&zombie.x>this.x+p.pixel/2){
+             //   contador2++;
+            if(contador2>=p.FPS*1.5){//30 frames y 10 son los segundos 
+                vectorBalas.add(new Balas(p, this.x, this.y));
                 System.out.println("bala");
-                System.out.println(balas.size());
+                System.out.println(vectorBalas.size());
                 contador2=0;
             }
             }
@@ -73,14 +73,15 @@ public class Gizantes {
         colision();
         g2.drawImage(gisantes, x,y,p.pixel,p.pixel,p);
         g2.drawString(vida+"", x-20, y-20);
+        contador2++;
     }
 
     public void colision(){
 
-        for(zombies zz:p.z){
-            if((this.x)+p.pixel>=zz.x&&(this.x)+p.pixel<=zz.x+p.pixel&&this.y>=zz.y&&this.y<=zz.y+p.pixel/2){
+        for(zombies zombie:p.vectorZombies){
+            if((this.x)+p.pixel>=zombie.x&&(this.x)+p.pixel<=zombie.x+p.pixel&&this.y>=zombie.y&&this.y<=zombie.y+p.pixel/2){
                 contador3++;
-                if(contador3==30*2.5){//30 frames y 10 son los segundos 
+                if(contador3>=30*2){//30 frames y 10 son los segundos 
                     vida-=25;
                     contador3=0;
                 }
@@ -115,6 +116,7 @@ public class Gizantes {
             frame++;
             contador=0;
         }
+        
     }
 
     public boolean eliminar(MouseEvent e){

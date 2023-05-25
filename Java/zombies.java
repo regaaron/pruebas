@@ -10,6 +10,7 @@ import java.nio.Buffer;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.Clip;
 
+
 public class zombies {
     Plantas p;//objeto principal para la referencia
     double x,y; //posicion en x y y

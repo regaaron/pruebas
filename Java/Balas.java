@@ -32,7 +32,7 @@ public class Balas {
     }
 
     public void draw(Graphics2D g2){
-            g2.drawImage(bala, x, y, p.pixel/2,p.pixel/2,null);
+            g2.drawImage(bala, x, y, p.pixel/3,p.pixel/3,null);
             if(x<xfinal){
                 x+=4.5;
             }
@@ -40,10 +40,10 @@ public class Balas {
     }
 
     public boolean colision(){
-        for(zombies zz:p.z){
-            if((this.x+4.5)+p.pixel/4>=zz.x&&(this.x+4.5)+p.pixel/4<=zz.x+p.pixel&&this.y>=zz.y&&this.y<=zz.y+p.pixel){
+        for(zombies zombie:p.vectorZombies){
+            if((this.x+4.5)+p.pixel/4>=zombie.x&&(this.x+4.5)+p.pixel/4<=zombie.x+p.pixel&&this.y>=zombie.y&&this.y<=zombie.y+p.pixel){
                 danio.clip.start();
-                zz.vida-=25;
+                zombie.vida-=10;
                 return true;
             }
             
